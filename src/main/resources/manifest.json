@@ -1,18 +1,18 @@
 {
-  "Group": "${plugin_group}",
-  "Name": "${plugin_name}",
-  "Version": "${plugin_version}",
-  "Description": "${plugin_description}",
+  "Group": "Adathan",
+  "Name": "AdathansBossLibrary",
+  "Version": "1.0.1",
+  "Description": "Library for useful functionality for boss fights in Hytale by Adathan.",
   "Authors": [
     {
-      "Name": "${plugin_author}"
+      "Name": "Adathan"
     }
   ],
-  "Website": "${plugin_website}",
-  "ServerVersion": "${server_version}",
+  "Website": "",
+  "ServerVersion": "2026.03.26-89796e57b",
   "Dependencies": {},
   "OptionalDependencies": {},
   "DisabledByDefault": false,
   "IncludesAssetPack": true,
-  "Main": "${plugin_main_entrypoint}"
+  "Main": "com.Adathan.AdathansBossLibrary"
 }

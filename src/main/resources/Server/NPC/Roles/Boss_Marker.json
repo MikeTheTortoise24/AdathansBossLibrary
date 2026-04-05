@@ -1,0 +1,46 @@
+{
+  "Type": "Variant",
+  "Reference": "Template_Intelligent",
+  "Modify": {
+    "MaxHealth": 1000,
+    "ViewSector": 360,
+    "DropList": "Empty",
+    "Appearance": "Boss_Marker",
+    "MaxSpeed": 0.1,
+    "ViewRange": 1,
+    "AttackDistance": 0.5,
+    "BlockProbability": 0,
+    "Weapons": [],
+    "DisableDamageGroups": [
+      "Self",
+      "Player",
+      "Boss_Marker",
+      "Adathan_Void_Dragon_Group"
+    ],
+    "DesiredAttackDistanceRange": [
+      0,
+      25
+    ],
+    "CombatAttackPostDelay": [
+      0.1,
+      0.1
+    ],
+    "_CombatConfig": {
+      "EntityEffect": "Invulnerability"
+    },
+    "CombatRelativeTurnSpeed": 0.01,
+    "LeashDistance": 100,
+    "HardLeashDistance": 150,
+    "IsMemory": false,
+    "MemoriesCategory": "Elemental",
+    "NameTranslationKey": {
+      "Compute": "NameTranslationKey"
+    }
+  },
+  "Parameters": {
+    "NameTranslationKey": {
+      "Value": "Boss_Marker",
+      "Description": "Translation key for NPC name display"
+    }
+  }
+}
