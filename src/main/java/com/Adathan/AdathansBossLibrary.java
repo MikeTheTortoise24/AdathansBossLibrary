@@ -1,10 +1,12 @@
 package com.Adathan;
 
+import com.Adathan.conditions.SelfStatPercentageConditionAdathan;
 import com.Adathan.interactions.*;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
+import com.hypixel.hytale.server.npc.decisionmaker.core.conditions.base.Condition;
 
 public class AdathansBossLibrary extends JavaPlugin {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
@@ -16,7 +18,8 @@ public class AdathansBossLibrary extends JavaPlugin {
     @Override
     protected void setup() {
         this.getLogger().atInfo().log("[AdathansBossLibrary] Starting Plugin!");
-        new HStats("HStats_UUID", this.getManifest().getVersion().toString());
+        new HStats("0de965d6-0bce-4e91-881e-e772a9b30035", this.getManifest().getVersion().toString());
+
         Interaction.CODEC.register("ExecuteInteraction", ExecuteInteraction.class, ExecuteInteraction.CODEC);
         Interaction.CODEC.register("ExecuteInteractionAtPlayer", ExecuteInteractionAtPlayer.class, ExecuteInteractionAtPlayer.CODEC);
         Interaction.CODEC.register("ExecuteInteractionAtSelf", ExecuteInteractionAtSelf.class, ExecuteInteractionAtSelf.CODEC);
@@ -27,5 +30,7 @@ public class AdathansBossLibrary extends JavaPlugin {
         Interaction.CODEC.register("FireProjectilesSetIntervals", FireProjectilesSetIntervals.class, FireProjectilesSetIntervals.CODEC);
         Interaction.CODEC.register("TeleportSelfRelative", TeleportSelfRelative.class, TeleportSelfRelative.CODEC);
         Interaction.CODEC.register("TeleportSelfStatic", TeleportSelfStatic.class, TeleportSelfStatic.CODEC);
+
+        Condition.CODEC.register("OwnStatPercentageAdathan", SelfStatPercentageConditionAdathan.class, SelfStatPercentageConditionAdathan.CODEC);
     }
 }
