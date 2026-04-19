@@ -7,6 +7,7 @@ import com.hypixel.hytale.codec.validation.Validators;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
@@ -18,20 +19,31 @@ import com.hypixel.hytale.server.core.modules.projectile.ProjectileModule;
 import com.hypixel.hytale.server.core.modules.projectile.config.ProjectileConfig;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import org.jspecify.annotations.NonNull;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
+import java.util.stream.Collectors;
 
-public class FireProjectilesSetIntervals extends SimpleInstantInteraction {
+public class FireProjectilesSetIntervalsWithRemoval extends SimpleInstantInteraction {
     public static final BuilderCodec CODEC;
 
     protected String projectileConfigName;
     protected Integer count = 3;
-    protected Float offsetFromCenter = 0.0f;
+    protected Integer countToRemove = 1;
+    protected Float offsetFromCenter = 0.1f;
     protected Boolean angledAwayFromMiddle = false;
     protected Boolean angledTowardsMiddle = false;
+    protected Boolean randomRemoval = false;
 
     @Override
     protected void firstRun(@Nonnull InteractionType interactionType, @Nonnull InteractionContext interactionContext, @Nonnull CooldownHandler cooldownHandler) {
+        if (countToRemove >= count) {
+            HytaleLogger.getLogger().atInfo().log("[AdathansBossLibrary] Projectile count to remove >= projectile count. Doing Nothing.");
+            return;
+        }
         CommandBuffer<EntityStore> commandBuffer = interactionContext.getCommandBuffer();
         World world = interactionContext.getEntity().getStore().getExternalData().getWorld();
         Ref<EntityStore> entityRef = interactionContext.getOwningEntity();
@@ -44,9 +56,14 @@ public class FireProjectilesSetIntervals extends SimpleInstantInteraction {
 
         Vector3d flatForward = new Vector3d(direction.x, 0, direction.z).normalize();
 
+        ArrayList<Integer> markedForRemoval = getRemovalIntegers();
+
         double baseAngle = Math.atan2(flatForward.z, flatForward.x);
 
         for (int i = 0; i < count; i++) {
+            if (markedForRemoval.contains(i)) {
+                continue;
+            }
 
             double angle = baseAngle + (2 * Math.PI * i) / count;
 
@@ -67,12 +84,46 @@ public class FireProjectilesSetIntervals extends SimpleInstantInteraction {
 
     }
 
+    private @NonNull ArrayList<Integer> getRemovalIntegers() {
+        ArrayList<Integer> markedForRemoval = new ArrayList<>();
+        Random random = new Random();
+        if (!randomRemoval) {
+            int center = random.nextInt(count);
+            markedForRemoval.add(center);
+
+            int left = center;
+            int right = center;
+
+            // mark projectiles for removal (we just will not spawn them)
+            for (int i = 1; i <= countToRemove; i++) {
+                if (i % 2 == 1) {
+                    // go left
+                    left = (left - 1 + count) % count;
+                    markedForRemoval.add(left);
+                } else {
+                    // go right
+                    right = (right + 1) % count;
+                    markedForRemoval.add(right);
+                }
+            }
+        } else {
+            for (int i = 0; i < count; i++) {
+                markedForRemoval.add(i);
+            }
+            Collections.shuffle(markedForRemoval, random);
+
+            markedForRemoval = new ArrayList<>(markedForRemoval.subList(0, (countToRemove)));
+        }
+
+        return markedForRemoval;
+    }
+
     protected void simulateFirstRun(@Nonnull InteractionType type, @Nonnull InteractionContext context, @Nonnull CooldownHandler cooldownHandler) {
     }
 
     static {
-        CODEC = BuilderCodec.builder(FireProjectilesSetIntervals.class, FireProjectilesSetIntervals::new, SimpleInstantInteraction.CODEC)
-                .documentation("Spawn projectiles at an even degree angle from eachother.")
+        CODEC = BuilderCodec.builder(FireProjectilesSetIntervalsWithRemoval.class, FireProjectilesSetIntervalsWithRemoval::new, SimpleInstantInteraction.CODEC)
+                .documentation("Spawn projectiles at an even degree angle from eachother. Choose to remove some randomly.")
                 .append(new KeyedCodec<>("ProjectileConfigName", Codec.STRING),
                         (ExecuteInteraction, o) -> ExecuteInteraction.projectileConfigName =(String) o,
                         (ExecuteInteraction) -> ExecuteInteraction.projectileConfigName)
@@ -81,6 +132,10 @@ public class FireProjectilesSetIntervals extends SimpleInstantInteraction {
                 (ExecuteInteraction, o) -> ExecuteInteraction.count = o,
                 (ExecuteInteraction) -> ExecuteInteraction.count)
                 .documentation("Amount of projectiles to spawn.").add()
+                .append(new KeyedCodec<>("CountToRemove", Codec.INTEGER),
+                (ExecuteInteraction, o) -> ExecuteInteraction.countToRemove = o,
+                (ExecuteInteraction) -> ExecuteInteraction.countToRemove)
+                .documentation("Amount of projectiles to remove from those spawned.").add()
                 .append(new KeyedCodec<>("OffsetFromCenter", Codec.FLOAT),
                         (ExecuteInteraction, o) -> ExecuteInteraction.offsetFromCenter = o,
                         (ExecuteInteraction) -> ExecuteInteraction.offsetFromCenter)
@@ -93,6 +148,10 @@ public class FireProjectilesSetIntervals extends SimpleInstantInteraction {
                         (ExecuteInteraction, o) -> ExecuteInteraction.angledTowardsMiddle = o,
                         (ExecuteInteraction) -> ExecuteInteraction.angledTowardsMiddle)
                 .documentation("Should the projectiles angle directly toward the middle?").add()
+                .append(new KeyedCodec<>("RandomRemoval", Codec.BOOLEAN),
+                        (ExecuteInteraction, o) -> ExecuteInteraction.randomRemoval = o,
+                        (ExecuteInteraction) -> ExecuteInteraction.randomRemoval)
+                .documentation("Should the projectiles be removed randomly?").add()
                 .build();
     }
 }

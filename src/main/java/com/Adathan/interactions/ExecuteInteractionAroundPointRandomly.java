@@ -63,8 +63,6 @@ public class ExecuteInteractionAroundPointRandomly extends SimpleInstantInteract
                 HytaleLogger.getLogger().atWarning().log("[AdathansBossLibrary] Failed to spawn Mob %s at (%.1f, %.1f, %.1f): %s", entityNameToSpawn, position.x, position.y, position.z, e.getMessage());
             }
             if (npcRef != null) {
-                HytaleLogger.getLogger().atInfo().log("[AdathansBossLibrary] Triggered Interaction On: %s at (%.1f, %.1f, %.1f) for around point randomly function", entityNameToSpawn, position.x, position.y, position.z);
-
                 InteractionManager im = store.getComponent(npcRef, InteractionModule.get().getInteractionManagerComponent());
                 RootInteraction ri = RootInteraction.getAssetMap().getAsset(rootInteractionName);
                 InteractionContext ctx = InteractionContext.forInteraction(im, npcRef, InteractionType.Primary, store);

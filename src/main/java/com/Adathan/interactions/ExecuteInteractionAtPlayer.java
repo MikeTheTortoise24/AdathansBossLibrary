@@ -76,8 +76,6 @@ public class ExecuteInteractionAtPlayer extends SimpleInstantInteraction {
                     HytaleLogger.getLogger().atWarning().log("[AdathansBossLibrary] Failed to spawn Mob %s on player %s: %s", entityNameToSpawn, playerRef.getUsername(), e.getMessage());
                 }
                 if (npcRef != null) {
-                    HytaleLogger.getLogger().atInfo().log("[AdathansBossLibrary] Triggered Interaction On: %s at (%.1f, %.1f, %.1f) for player %s", entityNameToSpawn, position.x, position.y, position.z, playerRef.getUsername());
-
                     InteractionManager im = store.getComponent(npcRef, InteractionModule.get().getInteractionManagerComponent());
                     RootInteraction ri = RootInteraction.getAssetMap().getAsset(rootInteractionName);
                     InteractionContext ctx = InteractionContext.forInteraction(im, npcRef, InteractionType.Primary, store);

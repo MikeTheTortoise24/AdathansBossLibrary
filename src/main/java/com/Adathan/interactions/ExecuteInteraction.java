@@ -63,9 +63,6 @@ public class ExecuteInteraction extends SimpleInstantInteraction {
             for (int i = 0; i < npcs.size(); ++i) {
                 Ref<EntityStore> npcRef = this.filterNPCs(npcs.get(i), position, commandBuffer);
                 if (npcRef != null) {
-
-                    HytaleLogger.getLogger().atInfo().log("Triggered Interaction On: %s", entityName);
-
                     InteractionManager im = store.getComponent(npcRef, InteractionModule.get().getInteractionManagerComponent());
                     InteractionContext ctx = InteractionContext.forInteraction(im, npcRef, InteractionType.Primary, store);
                     InteractionChain cn = im.initChain(InteractionType.Primary, ctx, ri, false);
@@ -93,8 +90,6 @@ public class ExecuteInteraction extends SimpleInstantInteraction {
                 } else {
                     npcRef = iterator.next().getValue();
                 }
-
-                HytaleLogger.getLogger().atInfo().log("Triggered Interaction On: %s", entityName);
 
                 InteractionManager im = store.getComponent(npcRef, InteractionModule.get().getInteractionManagerComponent());
                 InteractionContext ctx = InteractionContext.forInteraction(im, npcRef, InteractionType.Primary, store);

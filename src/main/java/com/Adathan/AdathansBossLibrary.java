@@ -28,6 +28,7 @@ public class AdathansBossLibrary extends JavaPlugin {
         Interaction.CODEC.register("SetBlocksAroundCircle", SetBlocksAroundCircle.class, SetBlocksAroundCircle.CODEC);
         Interaction.CODEC.register("RotateSelf", RotateSelf.class, RotateSelf.CODEC);
         Interaction.CODEC.register("FireProjectilesSetIntervals", FireProjectilesSetIntervals.class, FireProjectilesSetIntervals.CODEC);
+        Interaction.CODEC.register("FireProjectilesSetIntervalsWithRemoval", FireProjectilesSetIntervalsWithRemoval.class, FireProjectilesSetIntervalsWithRemoval.CODEC);
         Interaction.CODEC.register("TeleportSelfRelative", TeleportSelfRelative.class, TeleportSelfRelative.CODEC);
         Interaction.CODEC.register("TeleportSelfStatic", TeleportSelfStatic.class, TeleportSelfStatic.CODEC);
 

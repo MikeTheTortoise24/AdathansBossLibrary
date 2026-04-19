@@ -11,15 +11,11 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.protocol.InteractionType;
-import com.hypixel.hytale.server.core.command.commands.world.entity.stats.EntityStatsSetCommand;
 import com.hypixel.hytale.server.core.entity.Frozen;
 import com.hypixel.hytale.server.core.entity.InteractionChain;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.entity.InteractionManager;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
-import com.hypixel.hytale.server.core.modules.entitystats.EntityStatMap;
-import com.hypixel.hytale.server.core.modules.entitystats.EntityStatValue;
-import com.hypixel.hytale.server.core.modules.entitystats.asset.DefaultEntityStatTypes;
 import com.hypixel.hytale.server.core.modules.interaction.InteractionModule;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.RootInteraction;
@@ -37,6 +33,12 @@ public class ExecuteInteractionAtSelf extends SimpleInstantInteraction {
 
     protected String rootInteractionName;
     protected String entityNameToSpawn;
+    protected Double relativeX = 0.0;
+    protected Double relativeY = 0.0;
+    protected Double relativeZ = 0.0;
+    protected float staticXRot = 0.0f;
+    protected float staticYRot = 0.0f;
+    protected float staticZRot = 0.0f;
 
     @Override
     protected void firstRun(@Nonnull InteractionType interactionType, @Nonnull InteractionContext interactionContext, @Nonnull CooldownHandler cooldownHandler) {
@@ -48,11 +50,18 @@ public class ExecuteInteractionAtSelf extends SimpleInstantInteraction {
         Vector3d position = (commandBuffer.getComponent(entityRef, TransformComponent.getComponentType())).getPosition();
         Vector3f rotation = (commandBuffer.getComponent(entityRef, TransformComponent.getComponentType())).getRotation();
 
+        if (staticXRot != 0 || staticYRot != 0 || staticZRot != 0) {
+            rotation = new Vector3f((float) Math.toRadians(staticXRot), (float) Math.toRadians(staticYRot), (float) Math.toRadians(staticZRot));
+        }
+
+        Vector3d finalPosition = new Vector3d(position.getX() + relativeX, position.getY() + relativeY, position.getZ() + relativeZ);
+
+        Vector3f finalRotation = rotation;
 
         world.execute(() -> {
             Ref<EntityStore> npcRef = null;
             try {
-                Pair<Ref<EntityStore>, INonPlayerCharacter> result = NPCPlugin.get().spawnNPC(store, entityNameToSpawn, null, position, rotation);
+                Pair<Ref<EntityStore>, INonPlayerCharacter> result = NPCPlugin.get().spawnNPC(store, entityNameToSpawn, null, finalPosition, finalRotation);
                 npcRef = result.first();
                 store.ensureComponent(npcRef, Frozen.getComponentType());
 
@@ -60,8 +69,6 @@ public class ExecuteInteractionAtSelf extends SimpleInstantInteraction {
                 HytaleLogger.getLogger().atWarning().log("[AdathansBossLibrary] Failed to spawn Mob %s on entity %s: %s", entityNameToSpawn, entityRef.toString(), e.getMessage());
             }
             if (npcRef != null) {
-                HytaleLogger.getLogger().atInfo().log("[AdathansBossLibrary] Triggered Interaction On: %s at (%.1f, %.1f, %.1f) for entity %s", entityNameToSpawn, position.x, position.y, position.z, entityRef.toString());
-
                 InteractionManager im = store.getComponent(npcRef, InteractionModule.get().getInteractionManagerComponent());
                 RootInteraction ri = RootInteraction.getAssetMap().getAsset(rootInteractionName);
                 InteractionContext ctx = InteractionContext.forInteraction(im, npcRef, InteractionType.Primary, store);
@@ -87,6 +94,30 @@ public class ExecuteInteractionAtSelf extends SimpleInstantInteraction {
                         (ExecuteInteraction, o) -> ExecuteInteraction.entityNameToSpawn =(String) o,
                         (ExecuteInteraction) -> ExecuteInteraction.entityNameToSpawn)
                 .documentation("NPC/Entity Name to execute the interaction on").addValidator(Validators.nonNull()).add()
+                .append(new KeyedCodec<>("RelativeX", Codec.DOUBLE),
+                        (ExecuteInteraction, o) -> ExecuteInteraction.relativeX =(Double) o,
+                        (ExecuteInteraction) -> ExecuteInteraction.relativeX)
+                .documentation("Relative X to add").addValidator(Validators.nonNull()).add()
+                .append(new KeyedCodec<>("RelativeY", Codec.DOUBLE),
+                        (ExecuteInteraction, o) -> ExecuteInteraction.relativeY =(Double) o,
+                        (ExecuteInteraction) -> ExecuteInteraction.relativeY)
+                .documentation("Relative Y to add").addValidator(Validators.nonNull()).add()
+                .append(new KeyedCodec<>("RelativeZ", Codec.DOUBLE),
+                        (ExecuteInteraction, o) -> ExecuteInteraction.relativeZ =(Double) o,
+                        (ExecuteInteraction) -> ExecuteInteraction.relativeZ)
+                .documentation("Relative Z to add").addValidator(Validators.nonNull()).add()
+                .append(new KeyedCodec<>("StaticXRot", Codec.FLOAT),
+                        (ExecuteInteraction, o) -> ExecuteInteraction.staticXRot =(Float) o,
+                        (ExecuteInteraction) -> ExecuteInteraction.staticXRot)
+                .documentation("Static X Rotation (Deg) (IF ANY STATIC ROT IS CHANGED IT WILL OVERRIDE PARENT ROT").addValidator(Validators.nonNull()).add()
+                .append(new KeyedCodec<>("StaticYRot", Codec.FLOAT),
+                        (ExecuteInteraction, o) -> ExecuteInteraction.staticYRot =(Float) o,
+                        (ExecuteInteraction) -> ExecuteInteraction.staticYRot)
+                .documentation("Static Y Rotation (Deg) (IF ANY STATIC ROT IS CHANGED IT WILL OVERRIDE PARENT ROT").addValidator(Validators.nonNull()).add()
+                .append(new KeyedCodec<>("StaticZRot", Codec.FLOAT),
+                        (ExecuteInteraction, o) -> ExecuteInteraction.staticZRot =(Float) o,
+                        (ExecuteInteraction) -> ExecuteInteraction.staticZRot)
+                .documentation("Static Z Rotation (Deg) (IF ANY STATIC ROT IS CHANGED IT WILL OVERRIDE PARENT ROT").addValidator(Validators.nonNull()).add()
                 .build();
     }
 }
