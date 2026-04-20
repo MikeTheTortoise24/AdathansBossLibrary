@@ -34,7 +34,8 @@ public class FireProjectilesSetIntervals extends SimpleInstantInteraction {
     protected void firstRun(@Nonnull InteractionType interactionType, @Nonnull InteractionContext interactionContext, @Nonnull CooldownHandler cooldownHandler) {
         CommandBuffer<EntityStore> commandBuffer = interactionContext.getCommandBuffer();
         World world = interactionContext.getEntity().getStore().getExternalData().getWorld();
-        Ref<EntityStore> entityRef = interactionContext.getOwningEntity();
+//        Ref<EntityStore> entityRef = interactionContext.getOwningEntity();
+        Ref<EntityStore> entityRef = interactionContext.getEntity();
         Store<EntityStore> store = world.getEntityStore().getStore();
         Vector3d startingPos = (commandBuffer.getComponent(entityRef, TransformComponent.getComponentType())).getPosition();
         Vector3d direction = (commandBuffer.getComponent(entityRef, HeadRotation.getComponentType()).getDirection());
@@ -62,7 +63,7 @@ public class FireProjectilesSetIntervals extends SimpleInstantInteraction {
                 direction = new Vector3d(startingPos).subtract(newPos).normalize();
             }
 
-            projectileModule.spawnProjectile(entityRef, commandBuffer, projectileConfig, newPos, direction);
+            Ref<EntityStore> projectileRef = projectileModule.spawnProjectile(entityRef, commandBuffer, projectileConfig, newPos, direction);
         }
 
     }

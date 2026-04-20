@@ -41,8 +41,8 @@ public class RotateSelf extends SimpleInstantInteraction {
     protected void firstRun(@Nonnull InteractionType interactionType, @Nonnull InteractionContext interactionContext, @Nonnull CooldownHandler cooldownHandler) {
         CommandBuffer<EntityStore> commandBuffer = interactionContext.getCommandBuffer();
         World world = interactionContext.getEntity().getStore().getExternalData().getWorld();
-        Ref<EntityStore> entityRef = interactionContext.getOwningEntity();
-
+//        Ref<EntityStore> entityRef = interactionContext.getOwningEntity();
+        Ref<EntityStore> entityRef = interactionContext.getEntity();
 
         HeadRotation headRotation = commandBuffer.getComponent(entityRef, HeadRotation.getComponentType());
         TransformComponent transformComponent = commandBuffer.getComponent(entityRef, TransformComponent.getComponentType());

@@ -31,6 +31,7 @@ public class AdathansBossLibrary extends JavaPlugin {
         Interaction.CODEC.register("FireProjectilesSetIntervalsWithRemoval", FireProjectilesSetIntervalsWithRemoval.class, FireProjectilesSetIntervalsWithRemoval.CODEC);
         Interaction.CODEC.register("TeleportSelfRelative", TeleportSelfRelative.class, TeleportSelfRelative.CODEC);
         Interaction.CODEC.register("TeleportSelfStatic", TeleportSelfStatic.class, TeleportSelfStatic.CODEC);
+        Interaction.CODEC.register("TeleportSelfRandomlyAroundPoint", TeleportSelfRandomlyAroundPoint.class, TeleportSelfRandomlyAroundPoint.CODEC);
 
         Condition.CODEC.register("OwnStatPercentageAdathan", SelfStatPercentageConditionAdathan.class, SelfStatPercentageConditionAdathan.CODEC);
     }
