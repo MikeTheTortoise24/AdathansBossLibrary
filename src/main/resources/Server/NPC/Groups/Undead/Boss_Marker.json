@@ -1,5 +1,6 @@
 {
   "IncludeRoles": [
-    "*Boss_Marker*"
+    "*Boss_Marker*",
+    "*Beam*"
   ]
 }
