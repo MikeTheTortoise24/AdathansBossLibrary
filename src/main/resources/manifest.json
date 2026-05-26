@@ -1,7 +1,7 @@
 {
   "Group": "Adathan",
   "Name": "AdathansBossLibrary",
-  "Version": "1.0.7",
+  "Version": "1.0.9",
   "Description": "Library for useful functionality for boss fights in Hytale by Adathan.",
   "Authors": [
     {
@@ -9,7 +9,7 @@
     }
   ],
   "Website": "",
-  "ServerVersion": "2026.03.26-89796e57b",
+  "ServerVersion": ">=0.5.0-pre.0",
   "Dependencies": {},
   "OptionalDependencies": {},
   "DisabledByDefault": false,

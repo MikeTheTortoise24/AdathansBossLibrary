@@ -8,8 +8,9 @@ import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
+import com.hypixel.hytale.math.vector.Rotation3f;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
@@ -49,7 +50,7 @@ public class TeleportSelfStatic extends SimpleInstantInteraction {
 
                         assert headRotationComponent != null;
 
-                        Vector3f previousBodyRotation = transformComponent.getRotation().clone();
+                        Rotation3f previousBodyRotation = transformComponent.getRotation().clone();
 
                         double x = staticX;
                         double z = staticZ;
@@ -59,17 +60,17 @@ public class TeleportSelfStatic extends SimpleInstantInteraction {
                         float roll = rollArg;
 
                         if (yaw == 0.0) {
-                            yaw = previousBodyRotation.getYaw();
+                            yaw = previousBodyRotation.yaw();
                         }
                         if (pitch == 0.0) {
-                            pitch = previousBodyRotation.getPitch();
+                            pitch = previousBodyRotation.pitch();
                         }
                         if (roll == 0.0) {
-                            roll = previousBodyRotation.getRoll();
+                            roll = previousBodyRotation.roll();
                         }
 
                         Teleport teleport = Teleport.createExact(
-                                new Vector3d(x, y, z), new Vector3f(previousBodyRotation.getPitch(), yaw, previousBodyRotation.getRoll()), new Vector3f(pitch, yaw, roll)
+                                new Vector3d(x, y, z), new Rotation3f(previousBodyRotation.pitch(), yaw, previousBodyRotation.roll()), new Rotation3f(pitch, yaw, roll)
                         );
                         store.addComponent(entityRef, Teleport.getComponentType(), teleport);
 

@@ -5,7 +5,8 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.math.vector.Vector3f;
+import com.hypixel.hytale.math.vector.Rotation3f;
+import org.joml.Vector3f;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
@@ -33,8 +34,8 @@ public class RotateSelfRandomly extends SimpleInstantInteraction {
         TransformComponent transformComponent = commandBuffer.getComponent(entityRef, TransformComponent.getComponentType());
         Random rand = new Random();
         int randomDegree = rand.nextInt(361);
-        Vector3f curRot = headRotation.getRotation();
-        Vector3f rotationVector = new Vector3f(curRot.getX(), (float) Math.toRadians(randomDegree) + curRot.getY(), curRot.getZ());
+        Rotation3f curRot = headRotation.getRotation();
+        Rotation3f rotationVector = new Rotation3f(curRot.x(), (float) Math.toRadians(randomDegree) + curRot.y(), curRot.z());
         world.execute(() -> {
             headRotation.setRotation(rotationVector);
             transformComponent.setRotation(rotationVector);

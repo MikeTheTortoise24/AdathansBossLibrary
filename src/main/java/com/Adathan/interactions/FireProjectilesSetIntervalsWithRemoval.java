@@ -8,7 +8,7 @@ import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.math.vector.Vector3d;
+import org.joml.Vector3d;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
@@ -74,9 +74,9 @@ public class FireProjectilesSetIntervalsWithRemoval extends SimpleInstantInterac
             Vector3d newPos = new Vector3d(x, y, z);
 
             if (angledAwayFromMiddle) {
-                direction = new Vector3d(newPos).subtract(startingPos).normalize();
+                direction = new Vector3d(newPos).sub(startingPos).normalize();
             } else if (angledTowardsMiddle) {
-                direction = new Vector3d(startingPos).subtract(newPos).normalize();
+                direction = new Vector3d(startingPos).sub(newPos).normalize();
             }
 
             projectileModule.spawnProjectile(entityRef, commandBuffer, projectileConfig, newPos, direction);

@@ -34,6 +34,9 @@ public class AdathansBossLibrary extends JavaPlugin {
         Interaction.CODEC.register("TeleportSelfStatic", TeleportSelfStatic.class, TeleportSelfStatic.CODEC);
         Interaction.CODEC.register("TeleportSelfRandomlyAroundPoint", TeleportSelfRandomlyAroundPoint.class, TeleportSelfRandomlyAroundPoint.CODEC);
 
+        // Trigger Volumes Interactions
+        Interaction.CODEC.register("ModifyVolumesTagInteraction", ModifyVolumesTagInteraction.class, ModifyVolumesTagInteraction.CODEC);
+
         Condition.CODEC.register("OwnStatPercentageAdathan", SelfStatPercentageConditionAdathan.class, SelfStatPercentageConditionAdathan.CODEC);
     }
 }

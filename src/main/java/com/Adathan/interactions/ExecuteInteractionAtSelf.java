@@ -8,8 +8,8 @@ import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
+import com.hypixel.hytale.math.vector.Rotation3f;
+import org.joml.Vector3d;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.entity.Frozen;
 import com.hypixel.hytale.server.core.entity.InteractionChain;
@@ -25,6 +25,7 @@ import com.hypixel.hytale.server.core.universe.world.npc.INonPlayerCharacter;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
 import it.unimi.dsi.fastutil.Pair;
+import org.joml.Vector3f;
 
 import javax.annotation.Nonnull;
 
@@ -49,15 +50,15 @@ public class ExecuteInteractionAtSelf extends SimpleInstantInteraction {
         Store<EntityStore> store = world.getEntityStore().getStore();
 
         Vector3d position = (commandBuffer.getComponent(entityRef, TransformComponent.getComponentType())).getPosition();
-        Vector3f rotation = (commandBuffer.getComponent(entityRef, TransformComponent.getComponentType())).getRotation();
+        Rotation3f rotation = (commandBuffer.getComponent(entityRef, TransformComponent.getComponentType())).getRotation();
 
         if (staticXRot != 0 || staticYRot != 0 || staticZRot != 0) {
-            rotation = new Vector3f((float) Math.toRadians(staticXRot), (float) Math.toRadians(staticYRot), (float) Math.toRadians(staticZRot));
+            rotation = new Rotation3f((float) Math.toRadians(staticXRot), (float) Math.toRadians(staticYRot), (float) Math.toRadians(staticZRot));
         }
 
-        Vector3d finalPosition = new Vector3d(position.getX() + relativeX, position.getY() + relativeY, position.getZ() + relativeZ);
+        Vector3d finalPosition = new Vector3d(position.x() + relativeX, position.y() + relativeY, position.z() + relativeZ);
 
-        Vector3f finalRotation = rotation;
+        Rotation3f finalRotation = rotation;
 
         world.execute(() -> {
             Ref<EntityStore> npcRef = null;

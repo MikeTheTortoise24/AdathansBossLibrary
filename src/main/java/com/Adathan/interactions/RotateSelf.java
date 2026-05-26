@@ -9,8 +9,9 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.spatial.SpatialResource;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
+import com.hypixel.hytale.math.vector.Rotation3f;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.entity.InteractionChain;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
@@ -47,8 +48,8 @@ public class RotateSelf extends SimpleInstantInteraction {
         HeadRotation headRotation = commandBuffer.getComponent(entityRef, HeadRotation.getComponentType());
         TransformComponent transformComponent = commandBuffer.getComponent(entityRef, TransformComponent.getComponentType());
 
-        Vector3f curRot = headRotation.getRotation();
-        Vector3f rotationVector = new Vector3f((float) Math.toRadians(rotX) + curRot.getX(), (float) Math.toRadians(rotY) + curRot.getY(), (float) Math.toRadians(rotZ) + curRot.getZ());
+        Rotation3f curRot = headRotation.getRotation();
+        Rotation3f rotationVector = new Rotation3f((float) Math.toRadians(rotX) + curRot.x(), (float) Math.toRadians(rotY) + curRot.y(), (float) Math.toRadians(rotZ) + curRot.z());
         world.execute(() -> {
             headRotation.setRotation(rotationVector);
             transformComponent.setRotation(rotationVector);
